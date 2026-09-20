@@ -1,14 +1,1 @@
-ใส่รูปปกหนังสือของคุณในโฟลเดอร์นี้
-
-ตั้งชื่อไฟล์เป็น:
-1.jpg
-2.jpg
-3.jpg
-4.jpg
-5.jpg
-6.jpg
-7.jpg
-
-ถ้าใช้ .png หรือ .webp ให้แก้ extension ใน js/app.js ให้ตรงกับชื่อไฟล์
-
-ตอนนี้เว็บมี fallback image จึงเปิดเว็บได้แม้ยังไม่มีรูป
+Add 1.jpg through 7.jpg here.
