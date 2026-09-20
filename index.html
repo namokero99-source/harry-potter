@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An independent Thai bookshop for Harry Potter English editions.">
+  <title>Owl & Quill — Harry Potter English Editions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Owl & Quill home">
+      <span class="brand-mark">✦</span>
+      <span>
+        <strong>Owl & Quill</strong>
+        <small>Independent Bookshop</small>
+      </span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#books">Books</a>
+      <a href="#about">About</a>
+      <button class="cart-button" id="cartButton" type="button" aria-label="Open shopping cart">
+        Cart <span id="cartCount">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <p class="eyebrow">English Editions · Independent Thai Bookshop</p>
+        <h1>Seven books.<br><em>One magical journey.</em></h1>
+        <p class="hero-copy">
+          Discover the complete Harry Potter series in English, carefully selected for readers who want to keep the magic on their shelves.
+        </p>
+        <a class="primary-button" href="#books">Explore the collection</a>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="moon"></div>
+        <div class="castle">♜</div>
+        <div class="stars">✦　·　✧　　·　✦</div>
+      </div>
+    </section>
+
+    <section class="collection section" id="books">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">The Collection</p>
+          <h2>Harry Potter · Books 1–7</h2>
+        </div>
+        <p>English editions</p>
+      </div>
+
+      <div class="book-grid" id="bookGrid"></div>
+    </section>
+
+    <section class="about section" id="about">
+      <div class="about-card">
+        <p class="eyebrow">Our little shop</p>
+        <h2>A quiet corner for good books.</h2>
+        <p>
+          Owl & Quill is an independent Thai bookshop concept created for readers who love physical books,
+          thoughtful shelves, and stories worth returning to.
+        </p>
+      </div>
+      <div class="about-note">
+        <span>☾</span>
+        <p>All titles shown are English editions. Availability and ordering details will be connected in the next stage.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 Owl & Quill</span>
+    <span>Harry Potter English Editions</span>
+  </footer>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-backdrop" id="cartBackdrop"></div>
+    <div class="cart-panel">
+      <div class="cart-header">
+        <div>
+          <p class="eyebrow">Your selection</p>
+          <h2>Shopping Cart</h2>
+        </div>
+        <button class="icon-button" id="closeCart" type="button" aria-label="Close cart">×</button>
+      </div>
+
+      <div class="cart-items" id="cartItems">
+        <p class="empty-cart">Your cart is empty.</p>
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total</span>
+          <strong id="cartTotal">฿0</strong>
+        </div>
+        <button class="primary-button full-width" id="checkoutButton" type="button" disabled>
+          Continue to checkout
+        </button>
+        <p class="cart-hint">Checkout will be connected to Supabase in the next stage.</p>
+      </div>
+    </div>
+  </aside>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
