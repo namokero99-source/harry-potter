@@ -1,23 +1,118 @@
 const SUPABASE_URL="https://jxcyscfonatnxjcjcssp.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_HZKgtwr-WJRObvgR0CNnfQ_MbV4rQ-r";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const productsEl=document.getElementById("products"),cartItemsEl=document.getElementById("cart-items"),cartCountEl=document.getElementById("cart-count"),cartTotalEl=document.getElementById("cart-total"),checkoutBtn=document.getElementById("checkout-btn"),dialog=document.getElementById("checkout-dialog"),checkoutForm=document.getElementById("checkout-form"),closeDialog=document.getElementById("close-dialog"),checkoutError=document.getElementById("checkout-error");
-let products=[],cart=JSON.parse(localStorage.getItem("hp_cart")||"[]");
-const money=v=>`฿${Number(v).toLocaleString("th-TH",{minimumFractionDigits:2})}`;
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-const getProduct=id=>products.find(p=>Number(p.id)===Number(id));
-function saveCart(){localStorage.setItem("hp_cart",JSON.stringify(cart))}
-function renderProducts(){if(!products.length){productsEl.innerHTML='<p class="muted">ไม่พบสินค้า</p>';return}
-productsEl.innerHTML=products.map(p=>`<article class="product-card"><img src="${esc(p.image_url)}" alt="${esc(p.title)}" onerror="this.onerror=null;this.src='/images/placeholder.jpg'"><h3>${esc(p.title)}</h3><div class="author">${esc(p.author||"")}</div><div class="price">${money(p.price)}</div><button class="primary-btn" onclick="addToCart(${Number(p.id)})">เพิ่มลงตะกร้า</button></article>`).join("")}
-function renderCart(){const q=cart.reduce((s,i)=>s+i.quantity,0);cartCountEl.textContent=q;if(!cart.length){cartItemsEl.innerHTML='<p class="muted">ยังไม่มีสินค้าในตะกร้า</p>';cartTotalEl.textContent=money(0);checkoutBtn.disabled=true;return}
-let total=0;cartItemsEl.innerHTML=cart.map(i=>{const p=getProduct(i.product_id);if(!p)return"";const sub=Number(p.price)*i.quantity;total+=sub;return`<div class="cart-item"><div><strong>${esc(p.title)}</strong><small>${money(p.price)} × ${i.quantity}</small></div><div class="qty-controls"><button onclick="changeQty(${Number(p.id)},-1)">−</button><span>${i.quantity}</span><button onclick="changeQty(${Number(p.id)},1)">+</button></div></div>`}).join("");cartTotalEl.textContent=money(total);checkoutBtn.disabled=false}
-window.addToCart=id=>{const x=cart.find(i=>Number(i.product_id)===Number(id));if(x)x.quantity++;else cart.push({product_id:Number(id),quantity:1});saveCart();renderCart()};
-window.changeQty=(id,d)=>{const x=cart.find(i=>Number(i.product_id)===Number(id));if(!x)return;x.quantity+=d;if(x.quantity<=0)cart=cart.filter(i=>Number(i.product_id)!==Number(id));saveCart();renderCart()};
-checkoutBtn.addEventListener("click",()=>{checkoutError.textContent="";dialog.showModal()});closeDialog.addEventListener("click",()=>dialog.close());
-checkoutForm.addEventListener("submit",async e=>{e.preventDefault();checkoutError.textContent="กำลังสร้างออร์เดอร์...";
-const body={customer_name:document.getElementById("customer_name").value.trim(),phone:document.getElementById("phone").value.trim(),line_id:document.getElementById("line_id").value.trim(),address:document.getElementById("address").value.trim(),note:document.getElementById("note").value.trim(),items:cart.map(i=>({product_id:Number(i.product_id),quantity:Number(i.quantity)}))};
-try{const r=await fetch("/api/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}),j=await r.json();if(!r.ok||!j.success)throw Error(j.error||"สร้างออร์เดอร์ไม่สำเร็จ");cart=[];saveCart();location.href="/thank-you.html?order="+encodeURIComponent(j.order_number)}catch(err){checkoutError.textContent=err.message}});
-async function loadProducts(){const{data,error}=await supabaseClient.from("products").select("*").order("id");if(error){productsEl.innerHTML=`<p class="error">โหลดสินค้าไม่สำเร็จ: ${esc(error.message)}</p>`;return}
-products=data||[];products=products.map(p=>({...p,image_url:normalizeImagePath(p.image_url,p.id)}));renderProducts();renderCart()}
-function normalizeImagePath(v,id){if(!v)return`/images/${id}.jpg`;if(/^https?:\/\//i.test(v))return v;let p=v.replace(/^\.?\//,"");if(!p.startsWith("/"))p="/"+p;if(!p.includes("/images/")&&!p.startsWith("/images/"))p="/images/"+p.split("/").pop();return p}
-loadProducts();
+
+let products=[];
+let cart=[];
+
+const $=s=>document.querySelector(s);
+const money=n=>new Intl.NumberFormat("th-TH",{style:"currency",currency:"THB"}).format(Number(n||0));
+
+function normalizeImagePath(v,id){
+  // Existing GitHub files are named 1.JPG ... 7.JPG.
+  if(!v) return `/images/${id}.JPG`;
+  if(/^https?:\/\//i.test(v)) return v;
+  const filename=(v.split("/").pop()||`${id}.JPG`).replace(/\.(jpg|jpeg|png|webp)$/i, ".JPG");
+  return `/images/${filename}`;
+}
+
+async function loadProducts(){
+  const {data,error}=await supabaseClient.from("products").select("*").order("id");
+  if(error){ console.error(error); return; }
+  products=data||[];
+  renderProducts();
+}
+
+function renderProducts(){
+  const el=$("#products");
+  if(!el) return;
+  el.innerHTML=products.map(p=>`
+    <article class="product-card">
+      <img class="product-image" src="${normalizeImagePath(p.image_url,p.id)}"
+           alt="${escapeHtml(p.title)}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="image-fallback">No image</div>
+      <h3>${escapeHtml(p.title)}</h3>
+      <p class="author">${escapeHtml(p.author||"")}</p>
+      <p class="price">${money(p.price)}</p>
+      <button onclick="addToCart(${p.id})">เพิ่มลงตะกร้า</button>
+    </article>`).join("");
+}
+
+function escapeHtml(s){
+  return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+window.addToCart=function(id){
+  const p=products.find(x=>x.id===id);
+  if(!p)return;
+  const item=cart.find(x=>x.id===id);
+  if(item)item.quantity++;
+  else cart.push({id:p.id,title:p.title,price:Number(p.price),quantity:1});
+  renderCart();
+};
+
+window.changeQty=function(id,delta){
+  const item=cart.find(x=>x.id===id);
+  if(!item)return;
+  item.quantity+=delta;
+  if(item.quantity<=0) cart=cart.filter(x=>x.id!==id);
+  renderCart();
+};
+
+function renderCart(){
+  const list=$("#cart-items"), count=$("#cart-count"), totalEl=$("#cart-total");
+  if(!list)return;
+  const total=cart.reduce((s,x)=>s+x.price*x.quantity,0);
+  if(count)count.textContent=cart.reduce((s,x)=>s+x.quantity,0);
+  if(totalEl)totalEl.textContent=money(total);
+  list.innerHTML=cart.length?cart.map(x=>`
+    <div class="cart-item">
+      <div><strong>${escapeHtml(x.title)}</strong><small>${money(x.price)} × ${x.quantity}</small></div>
+      <div class="qty">
+        <button onclick="changeQty(${x.id},-1)">−</button>
+        <span>${x.quantity}</span>
+        <button onclick="changeQty(${x.id},1)">+</button>
+      </div>
+    </div>`).join(""):`<p class="empty-cart">ยังไม่มีสินค้าในตะกร้า</p>`;
+}
+
+window.openCheckout=function(){
+  if(!cart.length)return alert("กรุณาเลือกสินค้าก่อน");
+  $("#checkout-modal")?.classList.add("open");
+};
+
+window.closeCheckout=function(){
+  $("#checkout-modal")?.classList.remove("open");
+};
+
+async function submitOrder(e){
+  e.preventDefault();
+  if(!cart.length)return;
+  const form=e.currentTarget;
+  const payload={
+    customer_name:form.customer_name.value.trim(),
+    phone:form.phone.value.trim(),
+    line_id:form.line_id.value.trim(),
+    address:form.address.value.trim(),
+    note:form.note.value.trim(),
+    items:cart.map(x=>({product_id:x.id,quantity:x.quantity}))
+  };
+  const btn=form.querySelector("button[type=submit]");
+  btn.disabled=true; btn.textContent="กำลังสร้างออเดอร์...";
+  try{
+    const res=await fetch("/api/create-order.js",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(!res.ok||!data.success)throw new Error(data.error||"สร้างออเดอร์ไม่สำเร็จ");
+    location.href=`/thank-you.html?order=${encodeURIComponent(data.order_number||"")}`;
+  }catch(err){
+    alert(err.message);
+    btn.disabled=false; btn.textContent="ยืนยันสั่งซื้อ";
+  }
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  loadProducts();
+  renderCart();
+  $("#checkout-form")?.addEventListener("submit",submitOrder);
+});
