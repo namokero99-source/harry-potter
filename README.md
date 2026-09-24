@@ -1,19 +1,24 @@
-# Harry Potter Bookstore — v2
-Supabase-connected catalog and guest checkout.
+# Harry Potter Bookstore
 
-Put covers in `images/1.jpg` through `images/7.jpg`.
-Never commit a Supabase secret key. Only the publishable key belongs in browser code.
-
-Next: move order creation to a Vercel serverless API, then connect Google Apps Script and Telegram server-side.
-
+## Pages
+- `/` ร้านหนังสือ
+- `/thank-you.html` หน้าขอบคุณหลังสั่งซื้อ
+- `/admin.html` หน้า Admin แบบ public สำหรับโปรเจกต์ส่งครู
 
 ## Vercel Environment Variables
-Set these in Vercel Project Settings → Environment Variables:
-- SUPABASE_URL
-- SUPABASE_SECRET_KEY
-- GOOGLE_SYNC_URL
-- GOOGLE_SYNC_SECRET (optional for the current Apps Script unless you add validation)
-- TELEGRAM_BOT_TOKEN
-- TELEGRAM_CHAT_ID
+- `SUPABASE_URL`
+- `SUPABASE_SECRET_KEY`
+- `GOOGLE_SYNC_URL`
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+- `GOOGLE_SYNC_SECRET` (optional)
 
-Do not put any secret key or Telegram token in frontend files or GitHub.
+อย่าใส่ secret key หรือ Telegram token ใน frontend
+
+## Images
+ใส่ไฟล์รูปจริงไว้ที่ `images/`:
+`1.jpg`, `2.jpg`, `3.jpg`, `4.jpg`, `5.jpg`, `6.jpg`, `7.jpg`
+
+โค้ดรองรับทั้ง `/images/1.jpg`, `images/1.jpg` และ `1.jpg`
+
+หมายเหตุ: Admin เปิดดูได้โดยไม่ต้อง Login เพราะเป็นโปรเจกต์ส่งครู ไม่ควรใช้รูปแบบนี้กับข้อมูลลูกค้าจริง

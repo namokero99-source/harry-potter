@@ -1,8 +1,1 @@
-{
-  "name": "harry-potter-bookstore",
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.0.0"
-  }
-}
+{"name":"harry-potter-bookstore","private":true,"type":"module","dependencies":{"@supabase/supabase-js":"^2.0.0"}}
