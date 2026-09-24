@@ -61,11 +61,12 @@ window.changeQty=function(id,delta){
 };
 
 function renderCart(){
-  const list=$("#cart-items"), count=$("#cart-count"), totalEl=$("#cart-total");
+  const list=$("#cart-items"), count=$("#cart-count"), totalEl=$("#cart-total"), checkoutBtn=$("#checkout-btn");
   if(!list)return;
   const total=cart.reduce((s,x)=>s+x.price*x.quantity,0);
   if(count)count.textContent=cart.reduce((s,x)=>s+x.quantity,0);
   if(totalEl)totalEl.textContent=money(total);
+  if(checkoutBtn)checkoutBtn.disabled=cart.length===0;
   list.innerHTML=cart.length?cart.map(x=>`
     <div class="cart-item">
       <div><strong>${escapeHtml(x.title)}</strong><small>${money(x.price)} × ${x.quantity}</small></div>
@@ -79,11 +80,11 @@ function renderCart(){
 
 window.openCheckout=function(){
   if(!cart.length)return alert("กรุณาเลือกสินค้าก่อน");
-  $("#checkout-modal")?.classList.add("open");
+  $("#checkout-dialog")?.showModal();
 };
 
 window.closeCheckout=function(){
-  $("#checkout-modal")?.classList.remove("open");
+  $("#checkout-dialog")?.close();
 };
 
 async function submitOrder(e){
@@ -101,7 +102,7 @@ async function submitOrder(e){
   const btn=form.querySelector("button[type=submit]");
   btn.disabled=true; btn.textContent="กำลังสร้างออเดอร์...";
   try{
-    const res=await fetch("/api/create-order.js",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    const res=await fetch("/api/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
     const data=await res.json();
     if(!res.ok||!data.success)throw new Error(data.error||"สร้างออเดอร์ไม่สำเร็จ");
     location.href=`/thank-you.html?order=${encodeURIComponent(data.order_number||"")}`;
@@ -115,4 +116,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   loadProducts();
   renderCart();
   $("#checkout-form")?.addEventListener("submit",submitOrder);
+  $("#checkout-btn")?.addEventListener("click",openCheckout);
+  $("#close-dialog")?.addEventListener("click",closeCheckout);
 });
