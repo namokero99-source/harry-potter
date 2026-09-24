@@ -1,30 +1,31 @@
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:Arial,"Noto Sans Thai",sans-serif;background:#f5f8f6;color:#14251c}
+html,body{margin:0;padding:0;font-family:"EB Garamond",Georgia,serif;background:radial-gradient(ellipse at top,#2b1055 0%,#140a2e 45%,#0a0517 100%);color:#e9dfc7}
 body{min-height:100vh}
-header{background:#164b2d;color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center}
-header a{color:#fff;text-decoration:none}
+header{background:linear-gradient(90deg,#3b0a0a,#5e1414);color:#f1d488;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #c9a227;box-shadow:0 2px 14px rgba(0,0,0,.5)}
+header a{color:#f1d488;text-decoration:none;font-family:"Cinzel",serif;letter-spacing:.5px}
 .container{max-width:1400px;margin:0 auto;padding:48px 24px}
-.hero{padding:40px 0 50px}
-.hero h1{font-size:clamp(42px,5vw,72px);margin:0 0 20px}
-.hero p{font-size:22px;color:#68766e}
-h2{font-size:30px;margin:0 0 28px}
+.hero{padding:40px 0 50px;text-align:center}
+.hero h1{font-family:"Cinzel Decorative",serif;font-size:clamp(38px,5vw,64px);margin:0 0 20px;color:#f1d488;text-shadow:0 0 18px rgba(241,212,136,.5)}
+.hero p{font-size:22px;color:#c9b98a;font-style:italic}
+h2{font-family:"Cinzel",serif;font-size:30px;margin:0 0 28px;color:#f1d488;text-align:center;letter-spacing:1px}
 .products-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:24px}
-.product-card{background:#fff;border:1px solid #dce7e0;border-radius:18px;padding:18px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.product-image,.image-fallback{width:100%;aspect-ratio:3/4;border-radius:12px;background:#e6f3e8;object-fit:cover}
-.image-fallback{display:none;align-items:center;justify-content:center;color:#789083}
-.product-card h3{font-size:20px;line-height:1.25;margin:16px 0 8px}
-.author{color:#708078;margin:0 0 14px}
-.price{font-size:22px;font-weight:700;margin:0 0 16px}
-button{border:0;border-radius:10px;padding:12px 18px;background:#20733d;color:#fff;font-weight:700;cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
+.product-card{background:#f4ead0;border:1px solid #c9a227;border-radius:10px;padding:18px;box-shadow:0 4px 20px rgba(201,162,39,.2)}
+.product-image,.image-fallback{width:100%;aspect-ratio:3/4;border-radius:6px;background:#e4d6ac;object-fit:cover;border:1px solid #c9a227}
+.image-fallback{display:none;align-items:center;justify-content:center;color:#8a6d3b}
+.product-card h3{font-family:"Cinzel",serif;font-size:19px;line-height:1.25;margin:16px 0 8px;color:#3b0a0a}
+.author{color:#6b5a35;margin:0 0 14px;font-style:italic}
+.price{font-size:22px;font-weight:700;margin:0 0 16px;color:#5e1414}
+button{border:0;border-radius:8px;padding:12px 18px;background:linear-gradient(180deg,#f1d488,#c9a227);color:#3b0a0a;font-weight:700;font-family:"Cinzel",serif;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);transition:box-shadow .2s,transform .2s}
+button:hover:not(:disabled){box-shadow:0 0 14px rgba(241,212,136,.8);transform:translateY(-1px)}
+button:disabled{opacity:.5;cursor:not-allowed}
 
 /* Cart: no longer fixed over the books. It sits below the product grid. */
-.cart-panel{position:static;width:100%;max-width:900px;margin:36px auto 20px;background:#fff;border:1px solid #dce7e0;border-radius:18px;padding:24px;box-shadow:0 4px 18px rgba(0,0,0,.06)}
-.cart-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e2e9e5;padding-bottom:18px}
-.cart-header h2{margin:0;font-size:28px}
-.cart-count{background:#e4f2e7;border-radius:999px;padding:8px 13px}
-.cart-item{display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-bottom:1px solid #edf1ee}
-.cart-item small{display:block;color:#718078;margin-top:5px}
+.cart-panel{position:static;width:100%;max-width:900px;margin:36px auto 20px;background:#f4ead0;border:1px solid #c9a227;border-radius:10px;padding:24px;box-shadow:0 4px 20px rgba(201,162,39,.2)}
+.cart-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #c9a227;padding-bottom:18px}
+.cart-header h2{margin:0;font-size:28px;color:#5e1414;text-align:left}
+.cart-count{background:#e8c766;color:#3b0a0a;font-weight:700;border-radius:999px;padding:8px 13px}
+.cart-item{display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-bottom:1px solid #d8c48f}
+.cart-item small{display:block;color:#6b5a35;margin-top:5px}
 .qty{display:flex;align-items:center;gap:10px}
 .qty button{padding:6px 10px}
 .cart-total{display:flex;justify-content:space-between;font-size:22px;font-weight:700;padding:20px 0}
@@ -32,15 +33,15 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .empty-cart{color:#718078}
 .error{color:#c0392b;min-height:1.2em;margin:10px 0 0}
 
-dialog#checkout-dialog{border:0;border-radius:18px;padding:0;width:min(600px,92vw);max-height:90vh}
-dialog#checkout-dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog#checkout-dialog{border:2px solid #c9a227;border-radius:14px;padding:0;width:min(600px,92vw);max-height:90vh;background:#f4ead0}
+dialog#checkout-dialog::backdrop{background:rgba(10,5,23,.75)}
 .checkout-form{position:relative;padding:28px;overflow:auto}
-.checkout-form h2{margin-top:0}
-.checkout-form label{display:block;margin:14px 0 6px;font-weight:700}
-.checkout-form input,.checkout-form textarea{width:100%;padding:12px;border:1px solid #ccd9d1;border-radius:8px;font:inherit}
+.checkout-form h2{margin-top:0;text-align:left;color:#5e1414}
+.checkout-form label{display:block;margin:14px 0 6px;font-weight:700;color:#3b0a0a}
+.checkout-form input,.checkout-form textarea{width:100%;padding:12px;border:1px solid #c9a227;border-radius:8px;font:inherit;background:#fffaf0}
 .checkout-form textarea{min-height:80px;resize:vertical}
 .checkout-form .primary-btn{margin-top:18px}
-.close-btn{position:absolute;top:16px;right:16px;background:#777;width:36px;height:36px;padding:0;line-height:1;border-radius:50%}
+.close-btn{position:absolute;top:16px;right:16px;background:#5e1414;color:#f1d488;width:36px;height:36px;padding:0;line-height:1;border-radius:50%}
 
 @media(max-width:1100px){.products-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:700px){.container{padding:28px 16px}.products-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.product-card{padding:12px}.product-card h3{font-size:17px}.hero h1{font-size:42px}}
