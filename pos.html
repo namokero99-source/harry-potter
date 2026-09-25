@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Harry Potter POS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cinzel+Decorative:wght@700&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+.pos-wrap{max-width:1200px;margin:0 auto;padding:30px 20px 60px}
+.pos-top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:24px}
+.pos-top h1{font-family:"Cinzel Decorative",serif;color:#f1d488;margin:0}
+.pos-top a{color:#f1d488;text-decoration:none}
+.pos-grid{display:grid;grid-template-columns:1.6fr .9fr;gap:24px;align-items:start}
+.pos-products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.pos-card{background:#f4ead0;color:#3b0a0a;border:1px solid #c9a227;border-radius:10px;padding:16px}
+.pos-card h3{font-family:"Cinzel",serif;font-size:18px;margin:0 0 8px}
+.pos-price{font-weight:700;color:#5e1414;margin-bottom:12px}
+.pos-controls{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pos-controls button{padding:7px 12px}
+.pos-controls span{font-weight:700;min-width:24px;text-align:center}
+.pos-side{position:sticky;top:18px;background:#f4ead0;color:#3b0a0a;border:1px solid #c9a227;border-radius:10px;padding:22px}
+.pos-side h2{color:#5e1414;text-align:left;margin-bottom:18px}
+.pos-side label{display:block;font-weight:700;margin:12px 0 6px}
+.pos-side input,.pos-side textarea{width:100%;padding:10px;border:1px solid #c9a227;border-radius:7px;background:#fffaf0;font:inherit}
+.pos-items{border-top:1px solid #d8c48f;border-bottom:1px solid #d8c48f;margin:15px 0;padding:8px 0}
+.pos-item{display:flex;justify-content:space-between;gap:10px;padding:8px 0}
+.pos-total{display:flex;justify-content:space-between;font-size:24px;font-weight:700;margin:18px 0}
+.pos-status{min-height:1.3em;color:#5e1414}
+@media(max-width:850px){.pos-grid{grid-template-columns:1fr}.pos-side{position:static}.pos-products{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><a href="/">Harry Potter Bookstore</a><a href="/admin.html">Admin</a></header>
+<main class="pos-wrap">
+  <div class="pos-top"><h1>POS</h1><a href="/">← กลับหน้าร้าน</a></div>
+  <div class="pos-grid">
+    <section>
+      <h2>เลือกสินค้า</h2>
+      <div id="pos-products" class="pos-products"><p>กำลังโหลดสินค้า...</p></div>
+    </section>
+    <aside class="pos-side">
+      <h2>รายการขาย</h2>
+      <div id="pos-items" class="pos-items"><p>ยังไม่มีสินค้า</p></div>
+      <div class="pos-total"><span>Total</span><strong id="pos-total">฿0.00</strong></div>
+      <label for="pos-customer">ชื่อลูกค้า</label>
+      <input id="pos-customer" placeholder="Walk-in / ชื่อลูกค้า">
+      <label for="pos-phone">เบอร์โทร / Line</label>
+      <input id="pos-phone" placeholder="ถ้ามี">
+      <label for="pos-note">หมายเหตุ</label>
+      <textarea id="pos-note" rows="3" placeholder="ถ้ามี"></textarea>
+      <button id="pos-submit" class="primary-btn" disabled>ยืนยันการขาย</button>
+      <p id="pos-status" class="pos-status"></p>
+    </aside>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/pos.js"></script>
+</body>
+</html>
